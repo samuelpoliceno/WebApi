@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using ProjetoP.WebApi.Model;
 
 namespace ProjetoP.WebApi.Controllers
@@ -41,6 +42,25 @@ namespace ProjetoP.WebApi.Controllers
                 return this.StatusCode(status404, messageError);
             }
             return Ok(result);
+        }
+
+        [HttpPost]
+        public ActionResult<Cidade> Post([FromBody] Cidade cidade){
+            var result = _context.Cidade.FirstOrDefault((p) => p.Id == cidade.Id);
+            if ( result == null) {
+                var status404 = StatusCodes.Status404NotFound;
+                var messageError = "Nao foi encontrada a cidade com o id " + id;
+                return this.StatusCode(status404, messageError);
+            }
+            else {
+                _context.Update(result);
+                return result;
+            }
+        }
+
+        [HttpPut("")]
+        public void Put(string value){
+
         }
 
     }
